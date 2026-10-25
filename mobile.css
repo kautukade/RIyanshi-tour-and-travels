@@ -1,0 +1,164 @@
+/* Riyanshi Tour & Travels — mobile-first responsive override layer */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{min-width:0}
+button,a,input,select,textarea{-webkit-tap-highlight-color:transparent}
+button,a{touch-action:manipulation}
+img{height:auto}
+
+@media (max-width:980px){
+  .site-header{width:calc(100% - 20px);top:10px;left:10px;right:10px;transform:none;height:68px;padding:0 14px;border-radius:20px}
+  .nav{display:none!important}
+  .menu-btn{display:grid!important;place-items:center;width:44px;height:44px;border:1px solid rgba(255,255,255,.12);border-radius:14px;background:rgba(255,255,255,.045);font-size:1.35rem;line-height:1;cursor:pointer}
+  .mobile-nav{position:fixed!important;display:grid!important;grid-template-columns:1fr;top:86px;left:10px;right:10px;z-index:70;padding:8px 14px;max-height:calc(100svh - 106px);overflow:auto;border-radius:22px;background:rgba(7,25,21,.98);border:1px solid rgba(255,255,255,.12);box-shadow:0 24px 70px rgba(0,0,0,.42);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);opacity:0;visibility:hidden;transform:translateY(-10px) scale(.985);pointer-events:none;transition:.24s ease}
+  .mobile-nav.open{opacity:1;visibility:visible;transform:none;pointer-events:auto}
+  .mobile-nav a{display:flex;align-items:center;min-height:54px;padding:14px 8px;border-bottom:1px solid rgba(255,255,255,.09);font-weight:700;font-size:1rem}
+  .mobile-nav a:last-child{border-bottom:0}
+  .hero{min-height:auto;padding:118px 0 54px;align-items:stretch}
+  .hero-grid,.split{grid-template-columns:minmax(0,1fr)!important;gap:26px}
+  .hero-copy,.car-stage,.planner,.calculator{min-width:0}
+  .hero-notes{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+  .car-stage{min-height:370px}
+  .grid-4{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .grid-3,.reviews{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .footer-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .section-head{align-items:flex-start}
+  .page-hero::after{width:330px;height:330px;right:-130px}
+}
+
+@media (max-width:720px){
+  :root{--radius:20px}
+  body{padding-bottom:82px}
+  .container{width:calc(100% - 24px)!important;max-width:100%;margin-inline:auto}
+  .site-header{height:62px;top:8px;padding:0 10px 0 12px;border-radius:18px}
+  .brand{gap:9px;min-width:0}
+  .brand-mark{width:38px;height:38px;border-radius:12px;font-size:20px;flex:0 0 auto}
+  .brand-copy{min-width:0}
+  .brand-copy strong{font-size:.96rem;white-space:nowrap}
+  .brand-copy small{display:none!important}
+  .header-actions{gap:7px}
+  .header-actions .btn{display:none!important}
+  .menu-btn{width:42px;height:42px;border-radius:13px}
+  .mobile-nav{top:78px;left:8px;right:8px;max-height:calc(100svh - 96px);border-radius:20px;padding:8px 12px}
+
+  .section{padding:64px 0!important}
+  .hero{padding:104px 0 42px}
+  .hero-media{background-position:60% center}
+  .hero-grid{gap:22px}
+  .display{font-size:clamp(2.85rem,14vw,4.35rem)!important;line-height:.94;letter-spacing:-.04em;margin:14px 0}
+  .lead{font-size:1rem;line-height:1.65}
+  .hero-actions{display:grid;grid-template-columns:1fr;gap:10px;margin-top:22px}
+  .hero-actions .btn{width:100%;min-height:50px;padding:13px 18px}
+  .hero-notes{grid-template-columns:1fr;gap:10px;margin-top:28px}
+  .note{padding:12px 0 0;display:grid;grid-template-columns:auto 1fr;column-gap:12px;align-items:start}
+  .note strong{margin:0}
+
+  .car-stage{min-height:290px;border-radius:22px}
+  .car-stage canvas{pointer-events:none;touch-action:none}
+  .car-copy{left:17px;right:17px;bottom:17px;max-width:none}
+  .car-copy strong{font-size:1.35rem}
+
+  .section-head{display:block!important;margin-bottom:26px}
+  .section-head h2{font-size:clamp(2.25rem,11vw,3.35rem)!important;line-height:1.02}
+  .section-head p{font-size:.98rem;line-height:1.65;margin-bottom:0}
+  .grid-4,.grid-3,.reviews,.footer-grid,.form-grid{grid-template-columns:minmax(0,1fr)!important}
+  .grid-4,.grid-3,.reviews{gap:14px}
+  .feature-card{padding:22px;min-height:0}
+  .icon{margin-bottom:28px}
+  .media-card{min-height:340px;padding:20px}
+  .media-card h3{font-size:1.65rem}
+
+  .page-hero{padding:112px 0 48px!important}
+  .page-hero h1{font-size:clamp(2.75rem,13.5vw,4.15rem)!important;line-height:.98;margin:14px 0}
+  .page-hero p{font-size:1rem;line-height:1.65}
+  .page-hero::after{width:230px;height:230px;right:-120px;top:32%}
+
+  .package-card img,.fleet-card img,.destination-card img{height:210px}
+  .card-body{padding:19px}
+  .card-body h3{font-size:1.2rem}
+  .card-actions{display:grid;grid-template-columns:1fr;gap:9px}
+  .card-actions .btn{width:100%}
+
+  .planner,.calculator{padding:18px!important;border-radius:20px}
+  .planner h2,.calculator h2{font-size:2rem!important;line-height:1.08!important;margin:10px 0 20px!important}
+  .form-grid{gap:12px}
+  .field.full{grid-column:auto!important}
+  .field input,.field select,.field textarea{font-size:16px!important;min-height:48px;padding:13px 14px}
+  .field textarea{min-height:110px}
+  .field .btn{width:100%;min-height:50px}
+  .estimate{margin-top:4px;padding:16px}
+  .estimate strong{font-size:1.45rem}
+
+  .filters{display:flex;flex-wrap:nowrap!important;overflow-x:auto;margin-left:-12px;margin-right:-12px;padding:2px 12px 14px;scroll-snap-type:x proximity;scrollbar-width:none}
+  .filters::-webkit-scrollbar{display:none}
+  .filter-btn{flex:0 0 auto;scroll-snap-align:start;min-height:42px}
+  .route-strip{margin-left:-12px;margin-right:-12px;padding-left:12px;padding-right:12px}
+
+  .gallery-grid{columns:1!important;column-gap:0}
+  .gallery-item{margin-bottom:12px;border-radius:18px}
+  .gallery-item:hover img{transform:none}
+  .lightbox{padding:14px;padding-bottom:calc(14px + env(safe-area-inset-bottom))}
+  .lightbox img{max-width:100%;max-height:82svh;border-radius:14px}
+  .lightbox button{right:14px;top:14px}
+
+  .map-panel{min-height:330px;padding:20px}
+  .map-point{font-size:.68rem;padding:7px 9px;box-shadow:0 0 0 5px rgba(246,196,83,.1)}
+  .point1{left:10%}.point2{left:43%}.point3{left:62%}.point4{left:64%;top:70%}
+
+  .cta-band{padding:24px!important;align-items:flex-start!important;flex-direction:column!important;border-radius:22px}
+  .cta-band h2{font-size:2.25rem!important;line-height:1.03}
+  .cta-band .btn{width:100%}
+
+  .faq-q{padding:18px;font-size:.98rem;gap:15px}
+  .faq-a p{padding:0 18px 18px}
+
+  .footer{padding:54px 0 112px!important}
+  .footer-grid{gap:26px}
+  .footer-grid>div:first-child{padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,.09)}
+  .footer-bottom{display:grid!important;grid-template-columns:1fr;gap:10px;margin-top:30px}
+
+  .float-actions{display:none!important}
+  .mobile-bottom{position:fixed!important;display:grid!important;grid-template-columns:1fr 1.15fr 1fr;left:8px;right:8px;bottom:max(8px,env(safe-area-inset-bottom));z-index:75;padding:6px;border:1px solid rgba(255,255,255,.12);border-radius:18px;background:rgba(6,20,17,.94);box-shadow:0 16px 40px rgba(0,0,0,.38);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+  .mobile-bottom a{display:grid;place-items:center;min-height:48px;border-radius:13px;font-size:.82rem;font-weight:800;color:#e9f0ed;text-align:center;padding:6px}
+  .mobile-bottom .wa{background:#25d366;color:#06140d}
+  .lang-switch{left:10px;bottom:calc(76px + env(safe-area-inset-bottom));z-index:60;transform:scale(.92);transform-origin:left bottom}
+
+  .btn:hover{transform:none}
+  .reveal{transform:translateY(14px)}
+}
+
+@media (max-width:430px){
+  .container{width:calc(100% - 20px)!important}
+  .site-header{left:6px;right:6px;width:calc(100% - 12px);top:6px}
+  .brand-copy strong{font-size:.9rem}
+  .display{font-size:clamp(2.65rem,15vw,3.85rem)!important}
+  .page-hero h1{font-size:clamp(2.55rem,14.5vw,3.75rem)!important}
+  .eyebrow{font-size:.69rem;letter-spacing:.13em}
+  .hero{padding-top:94px}
+  .car-stage{min-height:260px}
+  .section{padding:56px 0!important}
+  .media-card{min-height:310px}
+  .package-card img,.fleet-card img,.destination-card img{height:195px}
+  .feature-card,.review-card{padding:20px}
+  .mobile-bottom{left:6px;right:6px;bottom:max(6px,env(safe-area-inset-bottom));border-radius:16px}
+  .mobile-bottom a{font-size:.78rem;min-height:46px}
+}
+
+@media (max-width:360px){
+  .brand-copy strong{font-size:.82rem}
+  .brand-mark{width:36px;height:36px}
+  .menu-btn{width:40px;height:40px}
+  .display{font-size:2.55rem!important}
+  .page-hero h1{font-size:2.48rem!important}
+  .planner,.calculator{padding:15px!important}
+  .mobile-bottom a{font-size:.73rem}
+}
+
+@media (max-height:520px) and (orientation:landscape){
+  .mobile-nav{max-height:calc(100svh - 88px);overflow:auto}
+  .hero{padding-top:92px}
+  .car-stage{min-height:240px}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
