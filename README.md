@@ -1,28 +1,31 @@
 # Riyanshi Tour & Travels
 
-Premium static travel website built for Riyanshi Tour & Travels.
+Premium multi-page static website with no custom backend.
+
+## Pages
+- `index.html` — cinematic landing page + procedural Three.js car scene
+- `packages.html` — filterable trip ideas + WhatsApp enquiries
+- `fleet.html` — vehicle categories and quick selection
+- `planner.html` — trip planner + indicative browser-side fare estimator
+- `destinations.html` — filterable destination explorer + illustrative route map
+- `gallery.html` — responsive masonry gallery + lightbox
+- `contact.html` — Call, WhatsApp, email, FAQ and verified-review-ready section
+
+## Static features
+- Direct WhatsApp enquiry generation
+- Call and email CTAs
+- EN / Hindi / Marathi navigation switch
+- Mobile menu and sticky mobile actions
+- PWA manifest + service worker
+- Favicon, robots.txt and sitemap.xml
+- Netlify clean routes and security headers
+- Accessibility skip link and scroll-to-top utility
 
 ## Contact
-- Call: +91 96533 68681
-- WhatsApp: +91 96533 68681
+- Phone / WhatsApp: +91 96533 68681
+- Email: riyanshitourandtravel@gmail.com
 
-## Stack
-- HTML5
-- CSS3
-- Vanilla JavaScript
-- Three.js (CDN) for ambient 3D motion
-- Google Fonts
+## Important
+Fare rates in the demo estimator are indicative UI values only. Replace them with the business's confirmed rate card before treating them as published commercial pricing.
 
-## Features
-- Cinematic animated hero
-- Three.js particle/orbit effects
-- Premium travel visual design
-- Responsive mobile navigation
-- Experience and service sections
-- Scroll reveal and parallax motion
-- Direct Call and WhatsApp CTAs
-- No backend required
-- Netlify-ready deployment config
-
-## Deploy
-Connect this GitHub repository to Netlify and keep the publish directory as the repository root (`.`). No build command is required.
+Gallery photos are inspiration stock images and should be replaced with authorized real Riyanshi trip/vehicle photos when available.
