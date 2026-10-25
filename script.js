@@ -1,146 +1,17 @@
-const loader = document.getElementById('pageLoader');
-window.addEventListener('load', () => setTimeout(() => loader?.classList.add('hide'), 350));
-
-document.getElementById('year').textContent = new Date().getFullYear();
-
-const header = document.querySelector('.site-header');
-window.addEventListener('scroll', () => header.classList.toggle('scrolled', window.scrollY > 30), { passive: true });
-
-const menuToggle = document.getElementById('menuToggle');
-const mobileMenu = document.getElementById('mobileMenu');
-const toggleMenu = () => {
-  const open = mobileMenu.classList.toggle('open');
-  menuToggle.setAttribute('aria-expanded', String(open));
-  document.body.style.overflow = open ? 'hidden' : '';
-};
-menuToggle.addEventListener('click', toggleMenu);
-mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-  if (mobileMenu.classList.contains('open')) toggleMenu();
-}));
-
-const revealObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('show');
-      revealObserver.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-document.querySelectorAll('.reveal, .reveal-up').forEach(el => revealObserver.observe(el));
-setTimeout(() => document.querySelectorAll('.hero .reveal').forEach(el => el.classList.add('show')), 500);
-
-const glow = document.getElementById('cursorGlow');
-if (window.matchMedia('(pointer:fine)').matches) {
-  window.addEventListener('pointermove', e => {
-    glow.style.left = `${e.clientX}px`;
-    glow.style.top = `${e.clientY}px`;
-  }, { passive: true });
-} else if (glow) glow.style.display = 'none';
-
-const card = document.getElementById('tiltCard');
-if (card && window.matchMedia('(pointer:fine)').matches) {
-  card.addEventListener('pointermove', e => {
-    const r = card.getBoundingClientRect();
-    const x = (e.clientX - r.left) / r.width - .5;
-    const y = (e.clientY - r.top) / r.height - .5;
-    card.style.transform = `rotateY(${x * 14}deg) rotateX(${y * -10}deg) translateY(-4px)`;
-  });
-  card.addEventListener('pointerleave', () => card.style.transform = 'rotateY(-7deg) rotateX(2deg)');
-}
-
-// Gentle cinematic parallax without harming mobile performance.
-const cinematicBg = document.querySelector('.cinematic-bg');
-const finalBg = document.querySelector('.final-bg');
-if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-  window.addEventListener('scroll', () => {
-    const y = window.scrollY;
-    if (cinematicBg && window.innerWidth > 680) cinematicBg.style.transform = `translateY(${(y - cinematicBg.parentElement.offsetTop) * .05}px) scale(1.06)`;
-    if (finalBg) finalBg.style.transform = `translateY(${(y - finalBg.parentElement.offsetTop) * .04}px) scale(1.04)`;
-  }, { passive: true });
-}
-
-function initThree(canvasId, mode = 'hero') {
-  const canvas = document.getElementById(canvasId);
-  if (!canvas || typeof THREE === 'undefined' || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(55, 1, 0.1, 100);
-  camera.position.z = mode === 'hero' ? 6 : 7;
-  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.7));
-
-  const group = new THREE.Group();
-  scene.add(group);
-
-  const count = mode === 'hero' ? 90 : 55;
-  const geometry = new THREE.BufferGeometry();
-  const positions = new Float32Array(count * 3);
-  for (let i = 0; i < count; i++) {
-    positions[i * 3] = (Math.random() - .5) * 12;
-    positions[i * 3 + 1] = (Math.random() - .5) * 8;
-    positions[i * 3 + 2] = (Math.random() - .5) * 4;
-  }
-  geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-  const material = new THREE.PointsMaterial({ color: 0xe7c77f, size: mode === 'hero' ? .025 : .035, transparent: true, opacity: .75 });
-  group.add(new THREE.Points(geometry, material));
-
-  if (mode === 'hero') {
-    const ringMaterial = new THREE.MeshBasicMaterial({ color: 0xd9b56d, wireframe: true, transparent: true, opacity: .09 });
-    const torus = new THREE.Mesh(new THREE.TorusGeometry(2.5, .015, 8, 160), ringMaterial);
-    torus.rotation.x = 1.05;
-    torus.position.x = 3.3;
-    group.add(torus);
-    const torus2 = new THREE.Mesh(new THREE.TorusGeometry(1.55, .01, 8, 120), ringMaterial.clone());
-    torus2.rotation.y = .9;
-    torus2.position.set(3.2, .1, -.2);
-    group.add(torus2);
-  }
-
-  let mx = 0, my = 0;
-  window.addEventListener('pointermove', e => {
-    mx = (e.clientX / window.innerWidth - .5) * .25;
-    my = (e.clientY / window.innerHeight - .5) * .14;
-  }, { passive: true });
-
-  function resize() {
-    const parent = canvas.parentElement;
-    const w = parent.clientWidth;
-    const h = parent.clientHeight;
-    renderer.setSize(w, h, false);
-    camera.aspect = w / h;
-    camera.updateProjectionMatrix();
-  }
-  resize();
-  window.addEventListener('resize', resize);
-
-  let frame;
-  function animate() {
-    frame = requestAnimationFrame(animate);
-    group.rotation.y += mode === 'hero' ? .0008 : .0004;
-    group.rotation.x += (my - group.rotation.x) * .012;
-    group.rotation.y += (mx - group.rotation.y) * .004;
-    renderer.render(scene, camera);
-  }
-  animate();
-
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden && frame) cancelAnimationFrame(frame);
-    else animate();
-  });
-}
-
-initThree('heroCanvas', 'hero');
-initThree('ctaCanvas', 'cta');
-
-// Add a subtle magnetic feel to primary CTAs on desktop.
-if (window.matchMedia('(pointer:fine)').matches) {
-  document.querySelectorAll('.btn-gold').forEach(btn => {
-    btn.addEventListener('pointermove', e => {
-      const r = btn.getBoundingClientRect();
-      const x = e.clientX - (r.left + r.width / 2);
-      const y = e.clientY - (r.top + r.height / 2);
-      btn.style.transform = `translate(${x * .05}px, ${y * .08}px)`;
-    });
-    btn.addEventListener('pointerleave', () => btn.style.transform = '');
-  });
-}
+const PHONE='919653368681';const EMAIL='riyanshitourandtravel@gmail.com';
+const $=(s,p=document)=>p.querySelector(s),$$=(s,p=document)=>[...p.querySelectorAll(s)];
+function wa(message){window.open(`https://wa.me/${PHONE}?text=${encodeURIComponent(message)}`,'_blank','noopener');}
+function initNav(){const b=$('#menuBtn'),m=$('#mobileNav');if(b&&m){b.addEventListener('click',()=>{m.classList.toggle('open');b.setAttribute('aria-expanded',m.classList.contains('open'))});$$('a',m).forEach(a=>a.addEventListener('click',()=>m.classList.remove('open')))}}
+function initReveal(){const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')}),{threshold:.12});$$('.reveal').forEach(el=>io.observe(el))}
+const dict={hi:{home:'होम',packages:'पैकेज',fleet:'गाड़ियाँ',planner:'ट्रिप प्लानर',destinations:'डेस्टिनेशन',gallery:'गैलरी',contact:'संपर्क',plan:'ट्रिप प्लान करें',call:'कॉल करें'},mr:{home:'होम',packages:'पॅकेजेस',fleet:'गाड्या',planner:'ट्रिप प्लॅनर',destinations:'डेस्टिनेशन्स',gallery:'गॅलरी',contact:'संपर्क',plan:'ट्रिप प्लॅन करा',call:'कॉल करा'},en:{home:'Home',packages:'Packages',fleet:'Fleet',planner:'Trip Planner',destinations:'Destinations',gallery:'Gallery',contact:'Contact',plan:'Plan a trip',call:'Call us'}};
+function initLanguage(){const buttons=$$('.lang-switch button');const apply=l=>{$$('[data-i18n]').forEach(el=>{const k=el.dataset.i18n;if(dict[l]?.[k])el.textContent=dict[l][k]});buttons.forEach(b=>b.classList.toggle('active',b.dataset.lang===l));localStorage.setItem('riy-lang',l)};buttons.forEach(b=>b.addEventListener('click',()=>apply(b.dataset.lang)));apply(localStorage.getItem('riy-lang')||'en')}
+function initFaq(){$$('.faq-q').forEach(q=>q.addEventListener('click',()=>q.closest('.faq-item').classList.toggle('open')))}
+function initGallery(){const box=$('#lightbox'),img=$('#lightboxImg');$$('.gallery-item').forEach(x=>x.addEventListener('click',()=>{img.src=$('img',x).src;box.classList.add('open')}));$('#lightboxClose')?.addEventListener('click',()=>box.classList.remove('open'));box?.addEventListener('click',e=>{if(e.target===box)box.classList.remove('open')})}
+function initFilters(){const buttons=$$('.filter-btn'),cards=$$('[data-category]');buttons.forEach(b=>b.addEventListener('click',()=>{buttons.forEach(x=>x.classList.remove('active'));b.classList.add('active');const f=b.dataset.filter;cards.forEach(c=>c.style.display=f==='all'||c.dataset.category.includes(f)?'':'none')}))}
+function initPlanner(){const f=$('#tripForm');if(!f)return;f.addEventListener('submit',e=>{e.preventDefault();const d=new FormData(f);const msg=`Hi Riyanshi Tour & Travels, I want to plan a trip.\n\nPickup: ${d.get('from')}\nDestination: ${d.get('to')}\nDate: ${d.get('date')}\nPassengers: ${d.get('passengers')}\nVehicle: ${d.get('vehicle')}\nTrip type: ${d.get('tripType')}\nNotes: ${d.get('notes')||'-'}\n\nPlease share availability and final quote.`;wa(msg)})}
+const rates={sedan:13,suv:17,innova:20,traveller:27};
+function initFare(){const f=$('#fareForm'),out=$('#fareResult');if(!f)return;const calc=()=>{const km=Number(f.distance.value||0),rate=rates[f.vehicle.value]||0,mult=f.tripType.value==='round'?2:1;const est=Math.round(km*rate*mult);out.innerHTML=est>0?`Approximate fare <strong>₹${est.toLocaleString('en-IN')}</strong><br><small>Indicative estimate only. Toll, parking, state tax, waiting/night charges and route conditions may change the final quote.</small>`:'Enter distance to see an estimate.'};f.addEventListener('input',calc);f.addEventListener('submit',e=>{e.preventDefault();calc();const km=f.distance.value,veh=f.vehicle.options[f.vehicle.selectedIndex].text,type=f.tripType.options[f.tripType.selectedIndex].text;wa(`Hi Riyanshi Tour & Travels, I checked an approximate fare for ${km} km, ${veh}, ${type}. Please send me the final quote and availability.`)});calc()}
+function initPackageButtons(){$$('[data-enquire]').forEach(b=>b.addEventListener('click',()=>wa(`Hi Riyanshi Tour & Travels, I am interested in the ${b.dataset.enquire} package. Please share itinerary, availability and final pricing.`)))}
+function initThreeCar(){const c=$('#carScene');if(!c||!window.THREE)return;const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(38,c.clientWidth/c.clientHeight,.1,100),renderer=new THREE.WebGLRenderer({canvas:c,alpha:true,antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(c.clientWidth,c.clientHeight,false);camera.position.set(5,3.2,7);camera.lookAt(0,0.5,0);scene.add(new THREE.AmbientLight(0xffffff,1.6));const dl=new THREE.DirectionalLight(0xffd57b,3.3);dl.position.set(4,7,5);scene.add(dl);const car=new THREE.Group();const bodyMat=new THREE.MeshStandardMaterial({color:0x202725,metalness:.78,roughness:.22}),glass=new THREE.MeshStandardMaterial({color:0x6c9a92,metalness:.3,roughness:.08,transparent:true,opacity:.72});const body=new THREE.Mesh(new THREE.BoxGeometry(4.3,.8,2),bodyMat);body.position.y=.6;car.add(body);const cabin=new THREE.Mesh(new THREE.BoxGeometry(2.4,.85,1.75),glass);cabin.position.set(.15,1.38,0);car.add(cabin);[[1.45,.25,1.05],[1.45,.25,-1.05],[-1.35,.25,1.05],[-1.35,.25,-1.05]].forEach(p=>{const w=new THREE.Mesh(new THREE.CylinderGeometry(.45,.45,.34,24),new THREE.MeshStandardMaterial({color:0x050706,roughness:.7}));w.rotation.x=Math.PI/2;w.position.set(...p);car.add(w)});const floor=new THREE.Mesh(new THREE.PlaneGeometry(16,16),new THREE.MeshStandardMaterial({color:0x0b211b,roughness:1,transparent:true,opacity:.65}));floor.rotation.x=-Math.PI/2;floor.position.y=-.22;scene.add(floor);scene.add(car);let t=0;function render(){t+=.007;car.rotation.y=-.35+Math.sin(t)*.12;car.position.y=Math.sin(t*1.7)*.035;renderer.render(scene,camera);requestAnimationFrame(render)}render();addEventListener('resize',()=>{if(!c.clientWidth)return;camera.aspect=c.clientWidth/c.clientHeight;camera.updateProjectionMatrix();renderer.setSize(c.clientWidth,c.clientHeight,false)})}
+function initPwa(){if('serviceWorker'in navigator)navigator.serviceWorker.register('/sw.js').catch(()=>{})}
+document.addEventListener('DOMContentLoaded',()=>{initNav();initReveal();initLanguage();initFaq();initGallery();initFilters();initPlanner();initFare();initPackageButtons();initThreeCar();initPwa()});
